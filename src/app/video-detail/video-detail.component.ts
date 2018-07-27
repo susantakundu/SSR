@@ -10,9 +10,17 @@ export class VideoDetailComponent implements OnInit {
 
   constructor() { }
 
-  //@Input() videos: Video;
+  public editTitle: boolean = false;
+
+  @Input() video;
 
   ngOnInit() {
   }
 
+  onTitleClick(){
+    this.editTitle = true;
+  }
+  onBlurMethod(){
+    this.editTitle = false;
+  }
 }
