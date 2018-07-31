@@ -24,8 +24,16 @@ export class VideCenterComponent implements OnInit {
 
     selectedVideo: Video;
 
+    public newvideoAdding: boolean = false;
+
+
+    newVideo() {
+      this.newvideoAdding = true;
+    }
+
     onSelectVideo(video: any) {
       this.selectedVideo = video;
+      this.newvideoAdding = false;
       console.log(this.selectedVideo);
     }
 
@@ -33,6 +41,41 @@ export class VideCenterComponent implements OnInit {
   ngOnInit() {
       this._videoService.getVideos()
         .subscribe(resVideoData => this.videos = resVideoData)
+  }
+  onUpdateVideoEvent(video: any){
+    this._videoService.updateVideo(video)
+      .subscribe(resUpdatedVideo => video = resUpdatedVideo);
+  }
+
+  // deleting video
+  onDeleteVideoEvent(video: any){
+    //let videoArray = this.videos;
+    //console.log(videoArray);
+    console.log(video);
+    this._videoService.deleteVideo(video).subscribe( resDeletedVideo  => {
+     
+        // for(var i=0, i < videoA){
+        //   if(videoArray[i]._id === video._id)
+        //   {
+        //     videoArray.splice(i,1);
+        //   }
+       // }
+       var index = this.videos.indexOf(video, 0);
+        if (index > -1)
+        {
+            this.videos.splice(index, 1);
+        }
+       //videoArray.splice(resDeletedVideo._id, 1)
+      this.selectedVideo= null;
+    });
+  }
+  onSubmitAddVideo(video: Video){
+      this._videoService.addVideo(video)
+          .subscribe(resnewVideo => {
+              this.videos.push(resnewVideo);
+              this.newvideoAdding = false;
+              this.selectedVideo = resnewVideo;
+          })
   }
 
 }

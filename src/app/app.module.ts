@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { VideCenterComponent } from './vide-center/vide-center.component';
 import { VideoListComponent } from './video-list/video-list.component';
 import { VideoDetailComponent } from './video-detail/video-detail.component';
+import { SafePipe } from './pipes/safe.pipe';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { VideoDetailComponent } from './video-detail/video-detail.component';
     HomeComponent,
     VideCenterComponent,
     VideoListComponent,
-    VideoDetailComponent
+    VideoDetailComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,
