@@ -1,11 +1,15 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
 const mongoose = require('mongoose');
+const user = require('../models/user');
+
 const video = require('../models/video');
 
-const db = "mongodb://<dbuser>:<userpass>@ds145911.mlab.com:45911/susantamongo";
+
+const db = "mongodb://susant:susanta123@ds145911.mlab.com:45911/susantamongo";
 
 mongoose.Promise = global.Promise;
 
@@ -19,6 +23,51 @@ mongoose.connect(db, function(err){
 router.get('/', function(req, res){
     res.send('api works');
 });
+//  Authentication part Api
+
+router.post('/register',(req, res) => {
+    let userData = req.body;
+    let newUser = new user(userData);
+    //newUser.email = req.body.email;
+    //newUser.password = req.body.password;
+    newUser.save((err, registerdUser) => {
+        if(err){
+            console.log('Error Registering user');
+        }else {
+            let payload = { subject: registerdUser._id }
+            let token = jwt.sign(payload, 'secretKey') 
+            res.json({token})
+        }
+    });
+});
+
+// login api
+
+router.post('/login', function(req, res){
+    let userData = req.body;
+
+    user.findOne({email: userData.email}, function(error, user){
+        if(error){
+            console.log('Error');
+        }else{
+            if(!user) {
+                res.status(401).send('Invalid User');
+            } else 
+            if(user.password !== userData.password) {
+                res.status(401).send('Password did not match');
+            }else{
+                let payload = { subject: user }
+                let token = jwt.sign(payload, 'secretKey')
+                let decodedToken = jwt.decode(token)
+                res.status(200).json({token})
+            }
+        }
+    });
+    
+})
+
+
+
 
 // getting all videos
 router.get('/videos', function(req, res){
@@ -98,6 +147,8 @@ router.delete('/video/:id', function(req, res){
         }
     });
 });
+
+
 
 
 
