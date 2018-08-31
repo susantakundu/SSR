@@ -9,7 +9,7 @@ const user = require('../models/user');
 const video = require('../models/video');
 
 
-const db = "mongodb://susant:susanta123@ds145911.mlab.com:45911/susantamongo";
+const db = "mongodb://user:pass@ds145911.mlab.com:45911/susantamongo";
 
 mongoose.Promise = global.Promise;
 
